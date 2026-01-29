@@ -21,6 +21,10 @@ import Chat from './pages/buyer/Chat';
 
 import SellerDashboard from './pages/seller/SellerDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import SellerProductList from "./pages/seller/ProductList";
+import AddProduct from "./pages/seller/AddProduct";
+import EditProduct from "./pages/seller/EditProduct";
+
 
 function App() {
   return (
@@ -41,6 +45,10 @@ function App() {
 
       {/* Seller */}
       <Route path="/seller" element={<SellerDashboard />} />
+      <Route path="/seller/products" element={<SellerProductList />} />
+      <Route path="/seller/products/add" element={<AddProduct />} />
+      <Route path="/seller/products/edit/:id" element={<EditProduct />} />
+
 
       {/* Admin */}
       <Route path="/admin" element={<AdminDashboard />} />
