@@ -1,0 +1,31 @@
+.add-product-page {
+  background-color: #fde7ee;
+  min-height: 100vh;
+  padding: 40px;
+}
+
+.add-product-form {
+  background: white;
+  max-width: 400px;
+  margin-top: 30px;
+  padding: 24px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.add-product-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.add-product-form button {
+  background: #7fc97f;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
