@@ -29,10 +29,9 @@ function Home() {
 </section>
 
 
-
-      
 <section>
-  <h2>Popular Products</h2>
+  <h2 className="section-title">Popular Products</h2>
+
 
   <div className="card-row">
     

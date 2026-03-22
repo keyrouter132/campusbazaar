@@ -6,18 +6,48 @@ nav {
   border-bottom: 1px solid #ddd;
   box-sizing: border-box;   /* include padding in width */
   width: 100%;              /* limit navbar to screen width */
-  overflow: hidden; 
-  background-color: #fefefe;       
+  /*overflow-x: hidden; 
+  background-color: #fefefe;       */
 }
-
+/*
 nav input {
-  flex: 1;                  /* search bar grows to available space */
-  max-width: 300px;         /* optional: prevent huge input on big screens */
+  width: 300px;      
+  max-width: 100%;
   padding: 8px;
   margin-right: 16px;
   box-sizing: border-box;
   border-color: #4e1c1c;
+}*/
+
+/* Base search input style */
+nav input {
+  width: 280px;
+  height: 40px;
+  padding: 0 14px;
+  border: 2px solid #4e1c1c;
+  border-radius: 20px;
+  outline: none;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
 }
+
+/* When user clicks inside */
+nav input:focus {
+  border-color: #6b4e4e;
+}
+
+/* When mouse hovers */
+nav input:hover {
+  border-color: #8a5a5a;
+}
+
+/* Placeholder text */
+nav input::placeholder {
+  color: #999;
+  font-size: 13px;
+}
+
 
 nav a {
   margin-right: 16px;
@@ -38,4 +68,27 @@ nav div {                    /* login/signup buttons container */
   display: flex;
   gap: 12px;
   flex-wrap: wrap;           /* wrap buttons on small screens instead of overflowing */
+}
+
+.nav-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  nav input {
+    width: 100%;
+    order: 3;
+  }
+
+  .nav-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
