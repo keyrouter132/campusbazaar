@@ -4,7 +4,7 @@ import './Navbar.css';
 function Navbar() {
   return (
     <nav>
-      <div>
+      <div className="nav-left">
         <h2>CampusBazaar</h2>
       </div>
 
