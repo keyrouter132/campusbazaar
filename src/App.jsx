@@ -25,6 +25,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 
 import ProtectedSellerRoute from "./utils/protectedSellerRoute";
 import NotApproved from "./pages/seller/notApproved.jsx";
+import Cart from "./pages/buyer/Cart";
 
 function App() {
   console.log(import.meta.env.VITE_SUPABASE_URL);
@@ -48,6 +49,7 @@ function App() {
       <Route path="/buyer/products" element={<ProductList />} />
       <Route path="/buyer/products/:id" element={<ProductDetails />} />
       <Route path="/buyer/chat/:sellerId" element={<Chat />} />
+      <Route path="/buyer/cart" element={<Cart />} />
 
       {/* Seller */}
       {/* <Route path="/seller" element={<SellerDashboard />} /> */}

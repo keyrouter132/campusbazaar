@@ -38,10 +38,11 @@
   display: flex;
   align-items: flex-start;
   gap: 40px;
-  background-color: #6b4e4e;
+  background-color: #ffffff;
   border-radius: 20px;
   padding: 40px;
   margin: 40px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
 }
 
 .side-title {
@@ -52,6 +53,7 @@
     font-weight: 600;
     font-family:Georgia, 'Times New Roman', Times, serif;
     font-size: 28px;
+     color: #4e1c1c;   /* warm golden — complements the brown #6b4e4e */
 }
 
 .view-all-btn {
