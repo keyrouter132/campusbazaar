@@ -17,15 +17,6 @@
 
 
 
-.card-row {
-  display: flex;
-  gap: 32px;   
-  max-width: 100%;
-
-    margin-top: 50px;
-   
-    padding-bottom: 16px;
-}
 .card-row-wrapper {
   overflow-x: auto;       /* scroll only here */
   /*padding-bottom: 10px;
@@ -38,22 +29,21 @@
   display: flex;
   align-items: flex-start;
   gap: 40px;
-  
-  background-color: #ffffff;  /* or #fce4ec to match your theme */
-
+  background-color: #ffffff;
   border-radius: 20px;
   padding: 40px;
   margin: 40px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
 }
 
 .side-title {
   min-width: 160px;
-  font-size: 24px;
-  margin:0;
-  padding-top: 125px;
-    font-weight: 600;
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    font-size: 28px;
+  font-size: 28px;
+  margin: 0;
+  padding-top: 60px;  /* reduced from 125px */
+  font-weight: 600;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #4e1c1c;
 }
 
 .view-all-btn {
@@ -78,4 +68,10 @@
   color: #4e1c1c; /* matches your theme */
   margin-bottom: 10px;
   font-weight: 600;
+}
+.card-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: nowrap;
+  align-items: flex-start;
 }

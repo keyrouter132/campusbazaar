@@ -12,11 +12,15 @@ import Home from './pages/Home.jsx';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import BecomeSeller from './pages/buyer/BecomeSeller';
-
+import Checkout from "./pages/buyer/Checkout";
 
 import BuyerDashboard from './pages/buyer/BuyerDashboard';
 import ProductList from './pages/buyer/ProductList';
 import ProductDetails from './pages/buyer/ProductDetails';
+import ShopPage from './pages/buyer/ShopPage';
+import ShopList from './pages/buyer/ShopList';
+
+
 import Chat from './pages/buyer/Chat';
 import SellerApprovals from './pages/admin/SellerApprovals';
 
@@ -25,6 +29,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 
 import ProtectedSellerRoute from "./utils/protectedSellerRoute";
 import NotApproved from "./pages/seller/notApproved.jsx";
+import Cart from "./pages/buyer/Cart";
 import AdminOrders from "./pages/admin/AdminOrders";
 
 
@@ -51,6 +56,10 @@ function App() {
       <Route path="/buyer/products" element={<ProductList />} />
       <Route path="/buyer/products/:id" element={<ProductDetails />} />
       <Route path="/buyer/chat/:sellerId" element={<Chat />} />
+      <Route path="/buyer/cart" element={<Cart />} />
+      <Route path="/buyer/checkout" element={<Checkout />} />
+      <Route path="/shop/:id" element={<ShopPage />} />
+      <Route path="/shops" element={<ShopList />} />
 
       {/* Seller */}
       {/* <Route path="/seller" element={<SellerDashboard />} /> */}
