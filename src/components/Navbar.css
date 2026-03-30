@@ -4,55 +4,17 @@ nav {
   justify-content: space-between;
   padding: 16px 32px;
   border-bottom: 1px solid #ddd;
-  box-sizing: border-box;   /* include padding in width */
-  width: 100%;              /* limit navbar to screen width */
-  /*overflow-x: hidden; 
-  background-color: #fefefe;       */
-}
-/*
-nav input {
-  width: 300px;      
-  max-width: 100%;
-  padding: 8px;
-  margin-right: 16px;
   box-sizing: border-box;
-  border-color: #4e1c1c;
-}*/
-
-/* Base search input style */
-nav input {
-  width: 280px;
-  height: 40px;
-  padding: 0 14px;
-  border: 2px solid #4e1c1c;
-  border-radius: 20px;
-  outline: none;
-  font-size: 14px;
+  width: 100%;
   background-color: #fff;
-  color: #333;
 }
 
-/* When user clicks inside */
-nav input:focus {
-  border-color: #6b4e4e;
-}
-
-/* When mouse hovers */
-nav input:hover {
-  border-color: #8a5a5a;
-}
-
-/* Placeholder text */
-nav input::placeholder {
-  color: #999;
-  font-size: 13px;
-}
-
+/* DELETE the nav input block — not used */
 
 nav a {
   margin-right: 16px;
   text-decoration: none;
-  color:#333;
+  color: #333;
 }
 
 nav button {
@@ -61,14 +23,16 @@ nav button {
   border: none;
   background-color: #6b4e4e;
   color: white;
+  cursor: pointer;
 }
 
-
-nav div {                    /* login/signup buttons container */
+.nav-actions {
   display: flex;
+  align-items: center;
   gap: 12px;
-  flex-wrap: wrap;           /* wrap buttons on small screens instead of overflowing */
+  flex-wrap: wrap;
 }
+
 .search-container {
   display: flex;
   align-items: center;

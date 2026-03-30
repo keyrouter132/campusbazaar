@@ -67,166 +67,234 @@
 
 // export default SellerApprovals;
 
-
-
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
-
-import "./SellerApprovals.css";
+import { AdminLayout } from "./AdminLayout";
+import './AdminDashboard.css';
 
 function SellerApprovals() {
   const [sellers, setSellers] = useState([]);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("success");
 
-  // 🔹 Fetch pending seller applications
-  useEffect(() => {
-    const fetchSellerRequests = async () => {
-      const { data, error } = await supabase
-        .from("seller_requests")
-        .select(`
-          id,
-          uid,
-          shop_name,
-          shop_description,
-          category,
-          college_users (
-            name,
-            class_or_designation
-          )
-        `)
-        .eq("status", "pending");
+  const [stats, setStats] = useState({
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+  });
 
-      if (error) {
-        console.error("Fetch error:", error);
-      } else {
-        setSellers(data);
-      }
-    };
-
-    fetchSellerRequests();
-  }, []);
-
-  // 🔹 Approve Seller
-  const handleApprove = async (requestId, uid) => {
-    setMessage("");
-
-    const { error: requestError } = await supabase
+  const fetchStats = async () => {
+    const { data, error } = await supabase
       .from("seller_requests")
-      .update({ status: "approved" })
-      .eq("id", requestId);
+      .select("status");
 
-    const { error: userError } = await supabase
-      .from("users")
-      .update({ seller_status: "approved" })
-      .eq("uid", uid);
-
-    if (requestError || userError) {
-      console.error(requestError || userError);
-      setMessage("Error approving seller ");
-    } else {
-      setSellers(prev =>
-        prev.filter(seller => seller.id !== requestId)
-      );
-      setMessage("Seller approved successfully ");
+    if (!error) {
+      let pending = 0, approved = 0, rejected = 0;
+      data.forEach(item => {
+        if (item.status === "pending")  pending++;
+        if (item.status === "approved") approved++;
+        if (item.status === "rejected") rejected++;
+      });
+      setStats({ pending, approved, rejected });
     }
   };
 
-  // 🔹 Reject Seller
-  const handleReject = async (requestId, uid) => {
-    setMessage("");
+  const fetchSellerRequests = async () => {
+    const { data, error } = await supabase
+      .from("seller_requests")
+      .select(`
+        id,
+        college_id,
+        shop_name,
+        shop_description,
+        category,
+        college_users (
+          name,
+          class_or_designation
+        )
+      `)
+      .eq("status", "pending");
 
-    const { error: requestError } = await supabase
+    if (error) {
+      console.error("Fetch error:", error);
+    } else {
+      setSellers(data || []);
+    }
+  };
+  useEffect(() => {
+    fetchSellerRequests();
+    fetchStats();
+  }, []);
+
+  const showMessage = (text, type = "success") => {
+    setMessage(text);
+    setMessageType(type);
+    setTimeout(() => setMessage(""), 3000);
+  };
+
+  const handleApprove = async (seller) => {
+    if (!window.confirm(`Approve ${seller.shop_name}?`)) return;
+
+    try {
+      // 1. Get the user's UUID from the users table
+      const { data: userData, error: userErr } = await supabase
+        .from("users")
+        .select("id")
+        .eq("college_id", seller.college_id)
+        .single();
+
+      if (userErr || !userData) {
+        showMessage("User account not found for this College ID", "error");
+        return;
+      }
+
+      const userUuid = userData.id;
+
+      // 2. Update seller_request status to approved
+      const { error: reqErr } = await supabase
+        .from("seller_requests")
+        .update({ status: "approved" })
+        .eq("id", seller.id);
+
+      if (reqErr) throw reqErr;
+
+      // 3. Update user role and seller_status
+      const { error: userUpdateErr } = await supabase
+        .from("users")
+        .update({ role: "seller", seller_status: "approved" })
+        .eq("id", userUuid);
+
+      if (userUpdateErr) throw userUpdateErr;
+
+      // 4. Create the shop record — DO NOT touch products here at all.
+      //    Products are added by the seller themselves after approval.
+      const { error: shopErr } = await supabase
+        .from("shops")
+        .insert([{
+          seller_id: userUuid,
+          name: seller.shop_name,
+          description: seller.shop_description,
+          Category: seller.category,   // matches your schema column name
+        }]);
+
+      if (shopErr) throw shopErr;
+
+      setSellers(prev => prev.filter(item => item.id !== seller.id));
+      showMessage("Seller approved! Shop created successfully.", "success");
+      fetchStats();
+
+    } catch (err) {
+      console.error("Approval Error:", err);
+      showMessage("Approval failed. Check console.", "error");
+    }
+  };
+
+  const handleReject = async (requestId, college_id) => {
+    if (!window.confirm("Reject this seller?")) return;
+
+    const { error: r } = await supabase
       .from("seller_requests")
       .update({ status: "rejected" })
       .eq("id", requestId);
 
-    const { error: userError } = await supabase
+    const { error: u } = await supabase
       .from("users")
       .update({ seller_status: "rejected" })
-      .eq("uid", uid);
+      .eq("college_id", college_id);
 
-    if (requestError || userError) {
-      console.error(requestError || userError);
-      setMessage("Error rejecting seller ");
+    if (r || u) {
+      showMessage("Error rejecting seller", "error");
     } else {
-      setSellers(prev =>
-        prev.filter(seller => seller.id !== requestId)
-      );
-      setMessage("Seller rejected successfully ");
+      setSellers(prev => prev.filter(s => s.id !== requestId));
+      showMessage("Seller rejected successfully", "success");
+      fetchStats();
     }
   };
 
   return (
-    <div className="admin-container">
+    <AdminLayout pageTitle="Seller Approvals">
+      <h1>Seller Approvals</h1>
 
-      {/* Sidebar */}
-      <div className="sidebar">
-        <h3>Admin Panel</h3>
-        <p><Link to="/admin">Dashboard</Link></p>
-        <p><Link to="/admin/approvals">Seller Approvals</Link></p>
+      {/* Stats Row */}
+      <div className="approval-stats-row">
+        <div className="approval-stat pending">
+          <span className="stat-num">{stats.pending}</span>
+          <span className="stat-label">Pending</span>
+        </div>
+        <div className="approval-stat approved">
+          <span className="stat-num">{stats.approved}</span>
+          <span className="stat-label">Approved</span>
+        </div>
+        <div className="approval-stat rejected">
+          <span className="stat-num">{stats.rejected}</span>
+          <span className="stat-label">Rejected</span>
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="main-content">
-        <h1>Pending Seller Approvals</h1>
+      {/* Toast */}
+      {message && (
+        <div className={`toast-message ${messageType}`}>
+          {message}
+        </div>
+      )}
 
-        {/* Feedback Message */}
-        {message && (
-          <div className="success-message">
-            {message}
-          </div>
-        )}
+      {/* Empty State */}
+      {sellers.length === 0 && (
+        <div className="empty-state-card">
+          <p>No pending seller approvals.</p>
+        </div>
+      )}
 
-        {/* Empty State */}
-        {sellers.length === 0 && (
-          <div className="empty-state-card">
-            {/* <h3>All caught up!</h3> */}
-            <p>No pending seller approvals.</p>
-          </div>
-        )}
-
-        {/* Seller Cards */}
+      {/* Seller Cards */}
+      <div className="seller-cards-list">
         {sellers.map((seller) => (
           <div className="seller-card" key={seller.id}>
+            <div className="seller-card-header">
+              <div className="seller-avatar">
+                {seller.college_users?.name?.charAt(0).toUpperCase() ?? "?"}
+              </div>
+              <div className="seller-card-header-info">
+                <p className="seller-name">{seller.college_users?.name ?? "N/A"}</p>
+                <p className="seller-meta">
+                  {seller.college_users?.class_or_designation ?? "N/A"} · ID: {seller.college_id}
+                </p>
+              </div>
+              <span className="badge-pending">Pending</span>
+            </div>
 
-            <p><b>UID:</b> {seller.uid}</p>
+            <div className="seller-card-body">
+              <div className="seller-field">
+                <span className="field-key">Shop Name</span>
+                <span className="field-val">{seller.shop_name}</span>
+              </div>
+              <div className="seller-field">
+                <span className="field-key">Category</span>
+                <span className="field-val">{seller.category}</span>
+              </div>
+              <div className="seller-field full">
+                <span className="field-key">Description</span>
+                <span className="field-val">{seller.shop_description}</span>
+              </div>
+            </div>
 
-            <p>
-              <b>Name:</b>{" "}
-              {seller.college_users?.name || "N/A"}
-            </p>
-
-            <p>
-              <b>Class / Position:</b>{" "}
-              {seller.college_users?.class_or_designation || "N/A"}
-            </p>
-
-            <p><b>Shop Name:</b> {seller.shop_name}</p>
-            <p><b>Shop Description:</b> {seller.shop_description}</p>
-            <p><b>Category:</b> {seller.category}</p>
-
-            <div className="action-buttons">
+            <div className="seller-card-footer">
               <button
                 className="approve-btn"
-                onClick={() => handleApprove(seller.id, seller.uid)}
+                onClick={() => handleApprove(seller)}
               >
                 Approve
               </button>
-
               <button
                 className="reject-btn"
-                onClick={() => handleReject(seller.id, seller.uid)}
+                onClick={() => handleReject(seller.id, seller.college_id)}
               >
                 Reject
               </button>
             </div>
-
           </div>
         ))}
-
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 

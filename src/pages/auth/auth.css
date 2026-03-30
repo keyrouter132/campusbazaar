@@ -20,13 +20,13 @@
   margin-bottom: 20px;
 }
 
-.auth-card input {
+/* .auth-card input {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
   border-radius: 8px;
   border: 1px solid #ccc;
-}
+} */
 
 .auth-card button {
   width: 100%;
@@ -42,5 +42,15 @@
 
 .auth-link {
   margin-top: 12px;
+  font-size: 14px;
+}
+.auth-card input,
+.auth-card select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
   font-size: 14px;
 }

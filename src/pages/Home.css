@@ -38,7 +38,9 @@
   display: flex;
   align-items: flex-start;
   gap: 40px;
-  background-color: #6b4e4e;
+  
+  background-color: #ffffff;  /* or #fce4ec to match your theme */
+
   border-radius: 20px;
   padding: 40px;
   margin: 40px;

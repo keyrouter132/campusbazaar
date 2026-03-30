@@ -25,6 +25,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 
 import ProtectedSellerRoute from "./utils/protectedSellerRoute";
 import NotApproved from "./pages/seller/notApproved.jsx";
+import AdminOrders from "./pages/admin/AdminOrders";
+
+
 
 function App() {
   console.log(import.meta.env.VITE_SUPABASE_URL);
@@ -67,6 +70,7 @@ function App() {
       {/* Admin */}
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/approvals" element={<SellerApprovals />} />
+      <Route path="/admin/orders" element={<AdminOrders />} />
 
     </Routes>
   );
