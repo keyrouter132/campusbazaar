@@ -11,8 +11,7 @@ const NAV_ITEMS = [
   { path: "/seller/products",   label: "My Products"  },
   { path: "/seller/add-product",label: "Add Product"  },
   { path: "/seller/orders",     label: "Orders"       },
-  { path: "/seller/analytics",  label: "Analytics"    },
-  { path: "/seller/settings",   label: "Shop Settings"},
+  { path: "/seller/analytics",  label: "Analytics"    }
 ];
 export default function SellerLayout() {
   const navigate  = useNavigate();
@@ -279,6 +278,7 @@ export default function SellerLayout() {
             <span style={s.dot(false)} />
             <span style={s.navLabel}>View Shop ↗</span>
           </button>
+          
         </nav>
 
         {/* Spacer — fills remaining height, keeps collapse at bottom */}

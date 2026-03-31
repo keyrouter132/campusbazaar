@@ -30,7 +30,7 @@ import EditProduct from "./pages/seller/EditProduct";
 import Orders from "./pages/seller/Orders";
 import Analytics from "./pages/seller/Analytics";
 import SellerLayout from "./pages/seller/SellerLayout";
-import ShopSettings from './pages/seller/ShopSettings.jsx';
+
 import MyShops from './pages/seller/MyShops.jsx';
 import NotApproved from "./pages/seller/notApproved.jsx";
 
@@ -122,7 +122,7 @@ function App() {
       >
         <Route index element={<SellerDashboard />} /> {/* This matches /seller */}
         <Route path="dashboard" element={<SellerDashboard />} />
-        <Route path="shop-settings" element={<ShopSettings />} />
+
         <Route path="add-product" element={<AddProduct />} />
         <Route path="products" element={<SellerProductList />} />
         <Route path="edit-product/:id" element={<EditProduct />} />
